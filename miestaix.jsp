@@ -17,7 +17,6 @@
 %>
 <html>
 <%
-
 	Connection connection = null;
 	Statement statement_take = null;
 	Statement statement_change = null;
@@ -60,7 +59,7 @@
 				background-color: #DEB887;			
 			}
 		</style>
-<%		
+<%
 	try { 
 	
 		connection = DriverManager.getConnection ( connectionUrl + dbName + "?useUnicode=yes&characterEncoding=UTF-8", userId, password );
@@ -79,7 +78,6 @@
 																																					// miestas.takeFromParams ( request )
 				String sql_ins = "";
 
-				
 				for ( int i = 1; i < lent_miestu.length - 1; i++ ) {
 				
 					sql_ins += comma  + "'" + lauk_miesto [ i ] + "'";
@@ -109,7 +107,7 @@
 				}
 				sql_upd += "WHERE `id`=" + id_miesto;
 				
-				out.println ( sql_upd );
+				//out.println ( sql_upd );
 
 				statement_change = connection.createStatement();
 				resultSetChange = statement_change.executeUpdate( sql_upd );				
@@ -128,8 +126,6 @@
 	}
 %>		 
 		<script>
-
-		
 			function iRedagavima ( id_rec ) {
 			
 				if ( mygtukas = document.getElementById ( 'toEdit_' + id_rec ) ) {
