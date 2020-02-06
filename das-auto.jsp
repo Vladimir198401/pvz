@@ -124,6 +124,14 @@
 	}
 %>
 		<script>
+		function iValyma(){
+<%			for ( int i=1; i<lent_auto.length; i++ ) {
+%>
+				document.getElementById( '<%= lent_auto [ i ]  %>' ).value = "";
+<%
+			}
+%>
+		}
 		function iRedagavima ( id_rec ) {
 			
 				if ( mygtukas = document.getElementById ( 'toEdit_' + id_rec ) ) {
@@ -148,7 +156,6 @@
 				var r = confirm( "Ar norite pašalinti masina " + modelis + "?" );
 		
 				if ( r == true ) {
-				
 					document.getElementById ( "m_del" ).value = id_rec
 					forma_del = document.getElementById ( "del_rec" );
 					forma_del.submit();
@@ -238,7 +245,7 @@
 		<tr>
 			<td colspan="2">
 			 
-				<input type="button" name="clear" value="valyti"> 
+				<input type="button" name="clear" value="valyti" onClick = "iValyma()"> 
 				<input type="submit" name="add" value="papildyti">
 			</td>
 		</tr>
