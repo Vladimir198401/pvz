@@ -6,7 +6,6 @@
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.Connection"%>
 <%
-
 	String driverName = "com.mysql.jdbc.Driver";
 	String connectionUrl = "jdbc:mysql://localhost:3306/";
 	String dbName = "transportas";
@@ -34,6 +33,8 @@
 		response.setCharacterEncoding("UTF-8");		
 		
 	} catch(Exception e) {}
+	
+		//String id_klientu_auto;
 %>
 		<meta charset="utf-8">
 		<style>
@@ -56,6 +57,10 @@
 			}
 			td {
 				background-color: #DEB887;			
+			}
+			.autos {
+				margin-right: 7px;
+				margin-left: 7px;
 			}
 		</style>
 <%
@@ -95,21 +100,21 @@
 				statement_change = connection.createStatement();
 				resultSetChange = statement_change.executeUpdate(sql_ins);			
 			
-		 } else {
-				String sql_upd = " UPDATE `klientu_auto` SET\n";				
-				
-				for ( int i = 1; i < lent_auto.length; i++ ) {
-				
-					sql_upd += comma  + "`" + lent_auto [ i ]  + "`='" + lauk_auto [ i ] + "'\n";
-					comma = ",";																													// sql_ins = sql_ins + "'" + Miestai.value + "'";
-				}
-				sql_upd += "WHERE `id`=" + id_klientu_auto;
-				
-				out.println ( sql_upd );
+			} else {
+					String sql_upd = " UPDATE `klientu_auto` SET\n";				
+					
+					for ( int i = 1; i < lent_auto.length; i++ ) {
+					
+						sql_upd += comma  + "`" + lent_auto [ i ]  + "`='" + lauk_auto [ i ] + "'\n";
+						comma = ",";																													// sql_ins = sql_ins + "'" + Miestai.value + "'";
+					}
+					sql_upd += "WHERE `id`=" + id_klientu_auto;
+					
+					//out.println ( sql_upd );
 
-				statement_change = connection.createStatement();
-				resultSetChange = statement_change.executeUpdate( sql_upd );
-			}
+					statement_change = connection.createStatement();
+					resultSetChange = statement_change.executeUpdate( sql_upd );
+				}
 		 } else {
 		 
 			if ( add != null ) {
@@ -123,20 +128,13 @@
 		e.printStackTrace();
 	}
 %>
-		<script>
-		function iValyma(){
-<%			for ( int i=1; i<lent_auto.length; i++ ) {
-%>
-				document.getElementById( '<%= lent_auto [ i ]  %>' ).value = "";
-<%
-			}
-%>
-		}
+	<script>	
 		function iRedagavima ( id_rec ) {
 			
 				if ( mygtukas = document.getElementById ( 'toEdit_' + id_rec ) ) {
 <%
 					for ( int i=1; i<lent_auto.length; i++ ) {
+					
 %>					
 																																					
 						document.getElementById( '<%= lent_auto [ i ]  %>' ).value =  mygtukas.dataset.<%= lent_auto [ i ]  %>;
@@ -179,7 +177,6 @@
 			Statement statement_check = connection.createStatement();					
 			resultSet = statement_check.executeQuery(sql_fkey);
 		
-			
 			if ( resultSet.next() ) {
 %>			
 				alert ( "ups " );
@@ -191,8 +188,6 @@
 						+ " FROM" 
 							+ " `klientu_auto`" ;
 				sql_delete += " WHERE `id`=" + id_klientu_auto;
-
-				// out.println ( sql_delete );
 
 				statement_change = connection.createStatement();
 				resultSetChange = statement_change.executeUpdate(sql_delete);
@@ -221,7 +216,7 @@
 		<tr>
 			<th>pavarde</th>
 			<td>
-				<input id ="pavarde" type="text" name="pavarde" required>
+				<input id ="pavarde" type="text" name="pavarde" value="pavarde">
 			</td>
 		</tr>
 		<tr>
@@ -239,7 +234,7 @@
 		<tr>
 			<th>metai</th>
 			<td>
-				<input id ="metai" type="text" name="metai" required>
+				<input id ="metai" type="text" name="metai" value="2000">
 			</td>
 		</tr>
 		<tr>
@@ -261,21 +256,36 @@
 <form id="del_rec" method="post" action="">
 	<input type="hidden" name="del" value="del1rec">
 	<input type="hidden" id="m_del" name="m_del" value="0">
-</form>
-<table align="center">
-<tr>
+</form>	
+		<table align="center">
+<tbody><tr>
 </tr>
 <tr>
-	<th>id</th>
-	<th>Veiksmai</th>
+
+	<!-- th>Funkcijos</th>
+	<th>id</th --> 
 	<th>vardas</th>
 	<th>pavarde</th>
 	<th>tel_nr</th>
-	<th>modelis</th>
-	<th>metai</th>
-	<th>rida</th>
+	<tr></tr>
+	<td></td>
+	<td></td>
+	<td></td>
 </tr>
-		
+<tr>	
+	<td colspan="3"> 
+		<table class="autos">
+			<tr>
+			<th>modelis</th>
+			<th>metai</th>
+			<th>rida</th>
+			<tr></tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</table>
+	</td>
+</tr>
 <%
 	try {
 	
@@ -315,25 +325,26 @@
 			String rec_data = "";
 		
 			for ( int i = 1; i < lauk_auto.length; i++ ) {
-
 				rec_data += " data-"  + lent_auto [ i ]  + "=\"" + resultSet.getString (  lent_auto [ i ]  ) + "\"";
-
 			}
 			String id_rec = resultSet.getString (  "id"  );
+
 %>
 
 <tr>
-	<td><input type="button" class="record_edit"  id="toEdit_<%= id_rec  %>" data-id_klientu_auto="<%= id_rec  %>"<%= rec_data %> value="&#9998;" onClick="iRedagavima( <%= id_rec %> )"></td>
-	<td><input type="button" class="delete"  id="toDelete_<%= id_rec  %>" data-id_klientu_auto="<%= id_rec %>" value="&#10007;" onClick="iTrinima( <%= id_rec %> )"></td>
+	<!--td><input type="button" class="record_edit"  id="toEdit_<%= id_rec  %>" data-id_klientu_auto="<%= id_rec  %>"<%= rec_data %> value="&#9998;" onClick="iRedagavima( <%= id_rec %> )"></td>
+	<td><input type="button" class="delete"  id="toDelete_<%= id_rec  %>" data-id_klientu_auto="<%= id_rec %>" value="&#10007;" onClick="iTrinima( <%= id_rec %> )"></td-->
 	
 <%
 		for ( int i = 1; i < lauk_auto.length; i++ ) {
+		
+		
 %>
-	<td><%= resultSet.getString (  lent_auto [ i ]  ) %></td>
+	<td><%= resultSet.getString (  lent_auto [ i ]  ) %></td >
 <%
 		}
 %>
-</tr>
+	</tr>
 <% 
 		}
 
